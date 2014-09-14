@@ -23,7 +23,7 @@ abstract class Processor
     }
     
     /**
-     * Process
+     * Process row
      * @param   array
      * @param   array   
      * @param   array   Array with columns or null
