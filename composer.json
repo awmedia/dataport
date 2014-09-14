@@ -1,7 +1,7 @@
 {
     "name": "aw/dataport",
     "authors": [
-        { "name": "Jerry Sietsma" "email": "email@sjerry.nl" }
+        { "name": "Jerry Sietsma", "email": "email@sjerry.nl" }
     ],
     "version": "0.0.1",
     "require": {
