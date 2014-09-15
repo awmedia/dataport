@@ -8,6 +8,7 @@ Framework for fast, flexible and reusable data conversion.
 - Processors to convert or format values
 - Filters to allow or disallow rows
 - Write formats to various destinations (file, db, mongo, array, webservice, etc.)
+- Low memory usage
 
 All components are optional, except the reader and writer.
 
