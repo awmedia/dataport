@@ -13,6 +13,9 @@ Framework for fast, flexible and reusable data conversion.
 All components are optional, except the reader and writer.
 
 
+
+
+
 Tmp docs:
 $dataPorter->getFilters()->add(Filter::factory('quantity', function($value) { return $value > 0; }));
 $dataPorter->getFilters()->add(Filter::factory('quantity', 'filter_var', array(':value', FILTER_VALIDATE_INT, array('options'=>array('min_range'=>0, 'max_range'=>100)))));
