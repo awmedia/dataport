@@ -27,10 +27,10 @@ class Filter
      * @info    The params will be forwarded to the constructor
      */
     public static function factory()
-	{
-		$class = new \ReflectionClass(get_called_class());
-		return $class->newInstanceArgs(func_get_args());
-	}
+    {
+        $class = new \ReflectionClass(get_called_class());
+        return $class->newInstanceArgs(func_get_args());
+    }
     
     /**
      * @param   mixed       String with column or array with column names
