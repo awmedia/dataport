@@ -19,10 +19,10 @@ class Result
     protected $exception;
     
     /**
-     * @param	bool	True if success, false if not
-     * @param	mixed	Result returned by the Writer or null
-     * @param	int		Row count
-     * @param	object	Exception instance or null
+     * @param    bool    True if success, false if not
+     * @param    mixed    Result returned by the Writer or null
+     * @param    int        Row count
+     * @param    object    Exception instance or null
      */
     public function __construct($success, $writerResult, $rowCount, Exception $exception = null)
     {

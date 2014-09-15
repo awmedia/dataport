@@ -58,22 +58,22 @@ abstract class Processor
     
     protected function onPreProcessRow(array $preProcessedRow, array $sourceRow, array $sourceColumns = null, Mapper $mapper)
     {
-	    return $preProcessedRow;
+        return $preProcessedRow;
     }
     
     protected function onPostProcessRow(array $postProcessedRow, array $sourceRow, array $sourceColumns = null, Mapper $mapper)
     {
-	    return $postProcessedRow;
+        return $postProcessedRow;
     }
         
     protected function onPreProcessCell($column, $preProcessedCell, array $mappedRow, array $sourceRow, array $sourceColumns, Mapper $mapper)
     {
-	    return $preProcessedCell;
+        return $preProcessedCell;
     }
     
     protected function onPostProcessCell($column, $postProcessedCell, array $mappedRow, array $sourceRow, array $sourceColumns, Mapper $mapper)
     {
-	    return $postProcessedCell;
+        return $postProcessedCell;
     }
     
     /**
@@ -103,8 +103,8 @@ abstract class Processor
     
     /**
      * Is the cell for the current row processed?
-     * @param	string	Destination column name
-     * @return	bool	True if cell in current row is processed, false if not
+     * @param    string    Destination column name
+     * @return    bool    True if cell in current row is processed, false if not
      */
     protected function isCellProcessed($destinationColumn)
     {
@@ -113,8 +113,8 @@ abstract class Processor
     
     /**
      * Get the cell value for the current row
-     * @param	string	Destination column name
-     * @return	mixed	The value for the cell or null if not processed yet
+     * @param    string    Destination column name
+     * @return    mixed    The value for the cell or null if not processed yet
      */
     protected function getConvertedCell($destinationColumn)
     {
