@@ -3,7 +3,7 @@ dataport
 
 Framework for fast, flexible and reusable data conversion.
 
-- Read formats (xml, csv, json, array, etc.) from sources (file, db, mongo, stream, webservice, etc.)
+- Read formats (xml, csv, json, array, etc.) from various sources (file, db, mongo, stream, webservice, etc.)
 - Mapper to map source columns to destination columns
 - Processors to convert or format columns values
 - Filters to allow or disallow rows
