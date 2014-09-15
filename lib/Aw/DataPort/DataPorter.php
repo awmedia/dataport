@@ -2,8 +2,7 @@
 
 namespace Aw\DataPort;
 
-use \Exception,
-    Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * DataPorter
