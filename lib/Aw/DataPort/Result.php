@@ -6,6 +6,8 @@ use \Exception;
 
 /**
  * Result
+ * DataPorter result object. 
+ * After construction this object is read-only
  * @author Jerry Sietsma
  */
 class Result
@@ -19,16 +21,17 @@ class Result
     protected $exception;
     
     /**
-     * @param    bool    True if success, false if not
-     * @param    mixed    Result returned by the Writer or null
+     * @param    bool       True if success, false if not
+     * @param    mixed      Result returned by the Writer or null
      * @param    int        Row count
-     * @param    object    Exception instance or null
+     * @param    object     Exception instance or null
      */
-    public function __construct($success, $writerResult, $rowCount, Exception $exception = null)
+    public function __construct($success, $writerResult, $rowCount, $filteredCount, Exception $exception = null)
     {
         $this->success = (bool) $success;
         $this->writerResult = $writerResult;
         $this->rowCount = $rowCount;
+        $this->filteredCount = $filteredCount;
         $this->exception = $exception;
     }
     
@@ -45,6 +48,11 @@ class Result
     public function getRowCount()
     {
         return $this->rowCount;
+    }
+    
+    public function getFilteredCount()
+    {
+        return $this->filteredCount;
     }
     
     public function getException()

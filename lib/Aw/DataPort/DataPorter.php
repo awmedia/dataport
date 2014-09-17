@@ -133,7 +133,7 @@ class DataPorter
             $exception = $e;
         }
         
-        return new DataPorterResult($success, $writerResult, $rowsPortedCounter, $exception);
+        return new DataPorterResult($success, $writerResult, $count, $filteredCount, $exception);
     }
     
     /**

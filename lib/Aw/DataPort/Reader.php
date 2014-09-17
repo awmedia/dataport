@@ -6,6 +6,8 @@ use \Exception;
 
 /**
  * Reader
+ * This class controls the ReaderAdapter.
+ * It can be extended to support logging for example.
  * @author Jerry Sietsma
  */
 class Reader
