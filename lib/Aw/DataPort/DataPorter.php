@@ -23,6 +23,8 @@ class DataPorter
     public function __construct()
     {
         $this->processors = new ArrayCollection();
+        $this->preProcessorFilters = new ArrayCollection();
+        $this->postProcessorFilters = new ArrayCollection();
     }
     
     public function setReader(Reader $reader)
@@ -63,6 +65,16 @@ class DataPorter
         return $this->processors;
     }
     
+    public function getPreProcessorFilters()
+    {
+        return $this->preProcessorFilters;
+    }
+    
+    public function getPostProcessorFilters()
+    {
+        return $this->postProcessorFilters;
+    }
+    
     public function setAutoFlushWriter($autoFlush)
     {
         $this->autoFlushWriter = (bool) $autoFlush;
@@ -71,10 +83,11 @@ class DataPorter
     
     public function port()
     {
-        $counter = 0;
+        $count = 0;
         $result = null;
         $success = false;
         $exception = null;
+        $filteredCount = 0;
         
         try
         {
@@ -84,15 +97,27 @@ class DataPorter
             {
                 $mappedRow = $this->mapper ? $this->mapper->mapSourceToDestinationRow($sourceRow) : $sourceRow;
                 
+                if (!$this->acceptRowByFilters($mappedRow, $this->preProcessorFilters))
+                {
+                    $filteredCount++;
+                    continue;
+                }
+                
                 $processedRow = $mappedRow;
                 foreach ($this->getProcessors() as $processor)
                 {
                     $processedRow = $processor->process($mappedRow, $sourceRow, $sourceColumns, $this->mapper);
                 }
                 
+                if (!$this->acceptRowByFilters($processedRow, $this->postProcessorFilters))
+                {
+                    $filteredCount++;
+                    continue;
+                }
+                
                 $this->writer->writeRow($processedRow);
                                 
-                $counter++;
+                $count++;
             }
             
             if ($this->autoFlushWriter)
@@ -109,5 +134,22 @@ class DataPorter
         }
         
         return new DataPorterResult($success, $writerResult, $rowsPortedCounter, $exception);
+    }
+    
+    /**
+     * Private/protected function
+     */
+    
+    protected function acceptRowByFilters($row, $filters)
+    {
+        foreach ($filters as $filter)
+        {
+            if (!$filter->accept($sourceRow))
+            {
+                return false;
+            }
+        }
+        
+        return true;
     }
 }
