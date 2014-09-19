@@ -11,5 +11,5 @@
     "autoload": {
         "psr-0": { "Aw\\DataPort\\": "lib/" }
     },
-    "minimum-stability": "dev
+    "minimum-stability": "dev"
 }
