@@ -6,10 +6,10 @@
     "version": "0.0.1",
     "require": {
         "php": ">=5.3.2",
-        "aw/common": ">=0.0.1"
+        "aw/common": "dev"
     },
     "autoload": {
         "psr-0": { "Aw\\DataPort\\": "lib/" }
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev
 }
