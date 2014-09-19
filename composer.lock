@@ -1,0 +1,54 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "0159179e514c6340272d8779c9b93c48",
+    "packages": [
+        {
+            "name": "aw/common",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/awmedia/common.git",
+                "reference": "38decef26eb139f780e8ac067fd8a51ebf2dda11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/awmedia/common/zipball/38decef26eb139f780e8ac067fd8a51ebf2dda11",
+                "reference": "38decef26eb139f780e8ac067fd8a51ebf2dda11",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Aw\\Common\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Jerry Sietsma",
+                    "email": "email@sjerry.nl"
+                }
+            ],
+            "description": "Common classes",
+            "time": "2014-09-19 12:20:19"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": {
+        "aw/common": 20
+    },
+    "prefer-stable": false,
+    "platform": {
+        "php": ">=5.3.2"
+    },
+    "platform-dev": []
+}

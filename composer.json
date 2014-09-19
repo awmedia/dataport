@@ -7,7 +7,7 @@
     "version": "0.0.1",
     "require": {
         "php": ">=5.3.2",
-        "aw/common": "dev-master"
+        "aw/common": "master"
     },
     "autoload": {
         "psr-0": { "Aw\\DataPort\\": "lib/" }
