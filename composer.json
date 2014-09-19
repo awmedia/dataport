@@ -1,5 +1,6 @@
 {
     "name": "aw/dataport",
+    "description": "Framework for fast, flexible and reusable data conversion.",
     "authors": [
         { "name": "Jerry Sietsma", "email": "email@sjerry.nl" }
     ],
