@@ -92,8 +92,15 @@ class DataPorter
         try
         {
             $sourceColumns = $this->reader->getColumns();
+            
+            $rows = $this->reader->getRows();
+            
+            if (!($row instanceof $rows))
+            {
+                throw new Exception('The ReaderAdapter should return an Iterator');
+            }
 
-            foreach ($this->reader->getRows() as $sourceRow)
+            foreach ($rows as $sourceRow)
             {
                 $mappedRow = $this->mapper ? $this->mapper->mapSourceToDestinationRow($sourceRow) : $sourceRow;
                 

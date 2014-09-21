@@ -10,8 +10,8 @@ interface WriterAdapter
 {
 	/**
 	 * Write row
-	 * @param	array	Row to write
-	 * @return	void
+	 * @param	array  Row to write
+	 * @return	bool   True if success, false if not
 	 */
 	public function writeRow(array $row);
 	
@@ -27,7 +27,7 @@ interface WriterAdapter
 	 * Flush
 	 * Sometimes data will be buffered before it will be written to the destination. 
 	 * This method will flush the buffer and write data to destination.
-	 * @return	void
+	 * @return	bool  True if success, false if not
 	 */
 	public function flush();
 }

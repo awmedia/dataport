@@ -2,8 +2,6 @@
 
 namespace Aw\DataPort;
 
-use \Exception;
-
 /**
  * Reader
  * This class controls the ReaderAdapter.
@@ -18,6 +16,15 @@ class Reader
     {
         $this->adapter = $adapter;
     }
+    
+    /**
+     * Get ReaderAdapter
+     * @return  object  ReaderAdapter instance
+     */
+    public function getAdapter()
+	{
+    	return $this->adapter;
+	}
     
     public function getRows()
     {
