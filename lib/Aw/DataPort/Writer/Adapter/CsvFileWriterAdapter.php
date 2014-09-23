@@ -38,7 +38,7 @@ class CsvFileWriterAdapter extends AbstractWriterAdapter
 		$this->createHeaderWithColumns = $createHeader;
 	}
 	
-	public function writeRow(array $convertedRow)
+	protected function _writeRow(array $convertedRow)
 	{
 		if ($this->fileHandle === null)
 		{

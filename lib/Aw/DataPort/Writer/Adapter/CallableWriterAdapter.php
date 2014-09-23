@@ -1,14 +1,12 @@
 <?php
 
-namespace Aw\DataPort;
-
-use Aw\DataPort\WriterAdapter;
+namespace Aw\DataPort\Writer\Adapter;
 
 /**
  * Callable Writer Adapter
  * @author Jerry Sietsma
  */
-class CallableWriterAdapter implements WriterAdapter
+class CallableWriterAdapter extends AbstractWriterAdapter
 {
 	protected $callable;
 	
@@ -17,7 +15,7 @@ class CallableWriterAdapter implements WriterAdapter
 		$this->callable = $callable;
 	}
 		
-	public function writeRow(array $row)
+	protected function _writeRow(array $row)
 	{
 		$success = false;
 		

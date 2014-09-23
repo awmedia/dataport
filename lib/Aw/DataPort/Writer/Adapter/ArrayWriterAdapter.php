@@ -1,14 +1,12 @@
 <?php
 
-namespace Aw\DataPort;
-
-use Aw\DataPort\WriterAdapter;
+namespace Aw\DataPort\Writer\Adapter;
 
 /**
  * Array Writer Adapter
  * @author Jerry Sietsma
  */
-class ArrayWriterAdapter implements WriterAdapter
+class ArrayWriterAdapter extends AbstractWriterAdapter
 {
 	protected $items;
 	
@@ -17,7 +15,7 @@ class ArrayWriterAdapter implements WriterAdapter
 		$this->items = array();
 	}
 		
-	public function writeRow(array $row)
+	protected function _writeRow(array $row)
 	{
 		$this->items[] = $row;
 		return true;

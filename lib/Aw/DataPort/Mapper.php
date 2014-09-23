@@ -22,6 +22,14 @@ class Mapper
         $this->includeUnmappedColumns = (bool) $include;
     }
     
+    public function __construct(array $mapping)
+    {
+        if ($mapping)
+        {
+            $this->setMapping($mapping);
+        }
+    }
+    
     /**
      * Set mapping
      * Map destination to source columns

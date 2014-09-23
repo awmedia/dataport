@@ -2,7 +2,8 @@
 
 namespace Aw\DataPort;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection,
+    Iterator;
 
 /**
  * DataPorter
@@ -60,6 +61,12 @@ class DataPorter
         return $this->mapper;
     }
     
+    /**
+     * Get processores
+     * Use this method to add processors to the collection.
+     * Valid processors are: Callables or Processor instances (subclasses)
+     * @return  object  ArrayCollection
+     */
     public function getProcessors()
     {
         return $this->processors;
@@ -95,7 +102,7 @@ class DataPorter
             
             $rows = $this->reader->getRows();
             
-            if (!($row instanceof $rows))
+            if (!($rows instanceof Iterator))
             {
                 throw new Exception('The ReaderAdapter should return an Iterator');
             }
@@ -113,7 +120,14 @@ class DataPorter
                 $processedRow = $mappedRow;
                 foreach ($this->getProcessors() as $processor)
                 {
-                    $processedRow = $processor->process($mappedRow, $sourceRow, $sourceColumns, $this->mapper);
+                    if ($processor instanceof Processor)
+                    {
+                        $processedRow = $processor->process($processedRow, $sourceRow, $sourceColumns, $this->mapper);
+                    }
+                    else
+                    {
+                        $processedRow = call_user_func($processor, $processedRow, $sourceRow, $sourceColumns, $this->mapper);
+                    }
                 }
                 
                 if (!$this->acceptRowByFilters($processedRow, $this->postProcessorFilters))
@@ -140,7 +154,7 @@ class DataPorter
             $exception = $e;
         }
         
-        return new DataPorterResult($success, $writerResult, $count, $filteredCount, $exception);
+        return new Result($success, $result, $count, $filteredCount, $exception);
     }
     
     /**
@@ -151,7 +165,7 @@ class DataPorter
     {
         foreach ($filters as $filter)
         {
-            if (!$filter->accept($sourceRow))
+            if (!$filter->accept($row))
             {
                 return false;
             }

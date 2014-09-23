@@ -2,8 +2,7 @@
 
 namespace Aw\DataPort;
 
-use \callable,
-    Aw\Common\Utils\ArrayUtils as Arr;
+use Aw\Common\Utils\ArrayUtils as Arr;
 
 /**
  * Filter
@@ -37,9 +36,9 @@ class Filter
      * @param   callable    Filter callable. The filter callable should ta
      * @param   array       Params for filter callable or null. 
      */
-    public function __construct($column, callable $callable, $params = null)
+    public function __construct($column, $callable, $params = null)
     {
-        $this->columns = is_array($column) ? $column : array($columns);
+        $this->columns = is_array($column) ? $column : array($column);
         $this->callable = $callable;
         $this->params = $params;
         
@@ -65,7 +64,7 @@ class Filter
     {
         $accept = 1;
         
-        $params = $this->params;
+        $params = $this->params ?: array();
         
         foreach ($this->columns as $column)
         {
@@ -79,7 +78,7 @@ class Filter
             else
             {
                 // replace placeholders with value
-                $params = array_map(function())
+                $params = array();
                 foreach ($this->valuePlaceHolderIndexes as $index)
                 {
                     $params[$index] = strtr($params[$index], array(':value'=>$value));

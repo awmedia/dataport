@@ -1,8 +1,9 @@
 <?php
 
-namespace Aw\DataPort;
+namespace Aw\DataPort\Writer\Adapter;
 
-use Aw\DataPort\WriterAdapter;
+use Aw\DataPort\WriterAdapter,
+    Aw\DataPort\Exception;
 
 /**
  * Abstract Writer Adapter
@@ -10,7 +11,7 @@ use Aw\DataPort\WriterAdapter;
  * like buffering, flushing and write counter
  * @author Jerry Sietsma
  */
-class AbstractWriterAdapter implements WriterAdapter
+abstract class AbstractWriterAdapter implements WriterAdapter
 {
     /**
      * @cfg int Buffer size: 1 = write instantly, > 1 = use buffer (1 = default)
@@ -43,14 +44,15 @@ class AbstractWriterAdapter implements WriterAdapter
      * Sub class specific writeRow implementation
      * @return  bool    Success?
      */
-    abstract function _writeRow(array $row);
+    abstract protected function _writeRow(array $row);
     
     /**
      * Override for custom implementation
+     * Not required to implement, but when used, it should be implemented
      */
 	public function getResult()
 	{
-    	return null;
+    	throw new Exception('The get result method is not implemented in ' . get_called_class());
 	}
 	
 	/**

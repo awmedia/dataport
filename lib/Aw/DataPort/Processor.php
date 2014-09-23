@@ -2,8 +2,7 @@
 
 namespace Aw\DataPort;
 
-use \Exception,
-    \Closure;
+use \Closure;
 
 /**
  * Processor

@@ -3,8 +3,7 @@
 namespace Aw\DataPort\Writer\Adapter;
 
 use Aw\DataPort\Exception,
-	\PDO,
-	Rapid\Rapid;
+	\PDO;
 
 /**
  * MySqlPdoWriterAdapter
@@ -33,21 +32,21 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
 	protected $customOnDuplicateKeyUpdateColumnsToIgnore;
 
 	/**
-	 * @var string $changedDateColumn 	DateTime only updates when values are different
+	 * @var string 	DateTime only updates when values are different
 	 */
 	protected $changedDateColumn;
 
 	/**
-	 * @var string $touchedDateColumn 	DateTime will allways be updated when INSERT_MODE_ON_DUPLICATE_KEY_UPDATE mode is enabled and unique key is matched
+	 * @var string 	DateTime will allways be updated when INSERT_MODE_ON_DUPLICATE_KEY_UPDATE mode is enabled and unique key is matched
 	 */
 	protected $touchedDateColumn;
 	
 	/**
-	 * @param 	string 	$tableName
-	 * @param 	object 	$connection
-	 * @param 	string 	$insertMode 	self::INSERT_MODE_*
+	 * @param 	string 
+	 * @param 	object 
+	 * @param 	string 	self::INSERT_MODE_*
 	 */
-	public function __construct($tableName, $connection, $insertMode = self::INSERT_MODE_INSERT, $autoResolvePrimaryKeyColumns = true)
+	public function __construct($tableName, PDO $connection, $insertMode = self::INSERT_MODE_INSERT, $autoResolvePrimaryKeyColumns = true)
 	{
 		parent::__construct($tableName);
 
@@ -58,7 +57,6 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
 		$this->primaryKeyColumns = array();
 		$this->insertMode = $insertMode;
 		$this->onDuplicateKeyUpdateSqlSuffix = null;
-		$this->writtenRowsCounter = 0;
 
 		// find primary key when insert mode is "onduplicatekeyupdate"
 		if ($this->insertMode === self::INSERT_MODE_ON_DUPLICATE_KEY_UPDATE && $autoResolvePrimaryKeyColumns === true)
@@ -141,19 +139,18 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
 	}
 
 	/**
-	 * AbstractDbWriterAdapter methods
+	 * Private/protected methods
 	 */
 
-	public function writeRow(array $convertedRow)
+	protected function _writeRow(array $row)
 	{
 		if (!$this->columns)
 		{
-			$this->columns = array_keys($convertedRow);
+			$this->columns = array_keys($row);
 
 			if ($this->changedDateColumn && !in_array($this->changedDateColumn, $this->columns))
 			{
 				$this->columns[] = $this->changedDateColumn;
-				//array_unshift($this->columns, $this->changedDateColumn);
 			}
 
 			if ($this->createdDateColumn && !in_array($this->createdDateColumn, $this->columns))
@@ -171,32 +168,31 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
 		{
 			$isReplaceInsertMode = $this->insertMode === self::INSERT_MODE_REPLACE;
 			$this->sqlBuffer = $isReplaceInsertMode ? 'REPLACE' : 'INSERT';
-			$this->sqlBuffer .= " INTO " . ($this->getDatabaseName(true, '.')) . " " . $this->getTableName(true) . " (`" . implode('`, `', $this->columns) . "`) VALUES ";
+			$this->sqlBuffer .= " INTO " . ($this->getDatabase(true, '.')) . " " . $this->getTable(true) . " (`" . implode('`, `', $this->columns) . "`) VALUES ";
 		}
 		
-		foreach ($convertedRow as $key => $value)
+		foreach ( as $key => $value)
 		{
-			$convertedRow[$key] = $this->quoteValue($value);
+			[$key] = $this->quoteValue($value);
 		}
 
 		if ($this->createdDateColumn)
 		{
-			$convertedRow[$this->createdDateColumn] = 'NOW()';
+			[$this->createdDateColumn] = 'NOW()';
 		}
 
 		if ($this->changedDateColumn)
 		{
-			$convertedRow[$this->changedDateColumn] = 'NOW()';
+			[$this->changedDateColumn] = 'NOW()';
 		}
 
 		if ($this->touchedDateColumn)
 		{
-			$convertedRow[$this->touchedDateColumn] = 'NOW()';
+			[$this->touchedDateColumn] = 'NOW()';
 		}
 		
-		$this->sqlBuffer .= " (" . implode(", ", $convertedRow) . "), ";
+		$this->sqlBuffer .= " (" . implode(", ", ) . "), ";
 
-		$this->writtenRowsCounter++;
 		$this->queryBufferCounter++;
 		
 		if ($this->queryBufferCounter >= $this->queryBufferRowsSize)
@@ -283,24 +279,17 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
 				}
 			}
 			
-			Rapid::$log->add(Logger::DEBUG, 'Flush ' . get_called_class() . ' at row ' . $this->writtenRowsCounter);
-
 			$this->executeQuery($this->sqlBuffer . ';');
 			
 			$this->sqlBuffer = null;
 			$this->queryBufferCounter = 0;
 		}
 	}
-	
-	public function getLastInsertId()
-    {
-		return $this->lastInsertId;
-    }
 
     protected function executeQuery($query)
     {	 
         $this->connection->query($query);
-        $this->lastInsertId = $this->connection->lastInsertId();
+        $this->lastItemId = $this->connection->lastInsertId();
     }
     
     /**
@@ -348,54 +337,4 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
 		if (is_null($value)) return PDO::PARAM_BOOL;
 		return PDO::PARAM_STR;
 	}
-}
-
-
-
-
-
-abstract class AbstractDatabaseWriterAdapter extends AbstractWriterAdapter
-{
-	protected $tableName;
-	
-	protected $databaseName;
-	
-	protected $lastInsertId;
-	
-	public function __construct($tableName)
-	{
-		$tableName = str_replace('`', '', $tableName);
-		$tableNameElements = explode('.', $tableName);
-		$hasDatabaseName = count($tableNameElements) > 1;
-		
-		$this->tableName = $tableNameElements[$hasDatabaseName ? 1 : 0];
-		$this->databaseName = $hasDatabaseName ? $tableNameElements[0] : null;
-	}
-	
-	protected function getTableName($quote = false)
-	{
-    	return $quote ? '`' . $this->tableName . '`' : $this->tableName;
-	}
-	
-	protected function getDatabaseName($quote = false, $suffix = '')
-	{
-    	$name = $quote ? (isset($this->databaseName) ? '`' . $this->databaseName . '`' : '') : $this->databaseName;
-    	
-    	if ($name !== null && $name !== '')
-    	{
-        	$name .= $suffix;
-    	}
-    	
-    	return $name;
-	}
-	
-	/**
-	 * Private/protected methods
-	 */
-	 
-	 /**
-	  * Method to execute query
-	  * Template methods
-	  */
-	 abstract protected function executeQuery($query);
 }

@@ -1,8 +1,6 @@
 <?php
 
-namespace Aw\DataPort\DataPort;
-
-use \Exception;
+namespace Aw\DataPort;
 
 /**
  * Result
