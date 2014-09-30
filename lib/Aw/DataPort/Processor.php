@@ -28,7 +28,7 @@ abstract class Processor
      * @param   array   
      * @param   array   Array with columns or null
      * @param   object  Mapper instance
-     * @param   mixed   Processed result
+     * @return   mixed   Processed result
      */
     public function processRow(array $mappedRow, array $sourceRow, $sourceColumns = null, Mapper $mapper)
     {
