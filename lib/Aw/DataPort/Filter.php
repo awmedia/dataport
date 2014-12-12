@@ -20,6 +20,9 @@ class Filter
     
     protected $valuePlaceholderIndexes;
     
+    // true = filter by source data, false = filter by destination data
+    protected $filterBySource = false;
+    
     /**
      * Factory method
      * Helper to create single-line Filter instances
@@ -33,7 +36,7 @@ class Filter
     
     /**
      * @param   mixed       String with column or array with column names
-     * @param   callable    Filter callable. The filter callable should ta
+     * @param   callable    Filter callable.
      * @param   array       Params for filter callable or null. 
      */
     public function __construct($column, $callable, $params = null)
@@ -54,6 +57,17 @@ class Filter
         }
     }
     
+    public function getFilterBySource()
+    {
+        return $this->filterBySource;
+    }
+    
+    public function setFilterBySource($filterBySource)
+    {
+        $this->filterBySource = (bool) $filterBySource;
+        return $this;
+    }
+    
     /**
      * Accept?
      * When the filter returns false for one or more columns, the row will be ignored
@@ -72,8 +86,8 @@ class Filter
             
             if (!$this->hasCustomParamSignature)
             {
-                // prepend value as first param
-                array_unshift($params, $value);
+                // prepend value as first param and columns as second
+                array_unshift($params, $value, $column);
             }
             else
             {

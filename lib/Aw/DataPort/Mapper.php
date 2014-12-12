@@ -90,8 +90,8 @@ class Mapper
         return $mappedRow;
     }
     
-    public function getDestinationColumnForSource($sourceColumn)
+    public function getSourceColumnForDestination($destinationColumn)
     {
-        return array_key_exists($sourceColumn, $this->getMapping()) ? $this->mapping[$sourceColumn] : null;
+        return array_key_exists($destinationColumn, $this->getMapping()) ? $this->mapping[$destinationColumn] : null;
     }
 }

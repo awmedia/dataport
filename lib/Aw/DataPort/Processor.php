@@ -16,9 +16,10 @@ abstract class Processor
      */
     private $cellMethodPrefix = 'process_';
     
+   
     public function __construct()
     {
-        $this->_processedRow;
+        $this->_processedRow = null;
         $this->_processorMethodsBuffer = array();
     }
     
@@ -79,12 +80,12 @@ abstract class Processor
      * Private/protected methods
      */
     
-    private function processCell($column, $cell, $mappedRow, $sourceRow, $sourceColumns, $mapper)
+    protected function processCell($column, $cell, $mappedRow, $sourceRow, $sourceColumns, $mapper)
     {
         if (!array_key_exists($column, $this->_processorMethodsBuffer))
         {
             $method = $this->cellMethodPrefix . str_replace(array(' ', '-', ':'), '_', $column);
-            $this->_processorMethodsBuffer[$column] = method_exists($this, $method) ? $method : null;
+            $this->_processorMethodsBuffer[$column] = $method = method_exists($this, $method) ? $method : null;
         }
         else
         {
@@ -93,8 +94,9 @@ abstract class Processor
         
         if ($method)
         {
-            $destinationColumnName = $mapper->getDestinationColumnForSource($column);
-            $cell = $this->{$method}($cell, $mappedRow, $sourceRow, $sourceColumns, $destinationColumnName);
+            $sourceColumnName = $mapper->getSourceColumnForDestination($column);
+            
+            $cell = $this->{$method}($cell, $mappedRow, $sourceRow, $sourceColumns, $sourceColumnName, $mapper);
         }
         
         return $cell;
@@ -117,6 +119,6 @@ abstract class Processor
      */
     protected function getConvertedCell($destinationColumn)
     {
-        return $this->_isCellConverted($destinationColumn) ? $this->_processedRow[$destinationColumn] : null;
+        return $this->isCellProcessed($destinationColumn) ? $this->_processedRow[$destinationColumn] : null;
     }
 }

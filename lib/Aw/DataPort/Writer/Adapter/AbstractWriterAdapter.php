@@ -3,7 +3,8 @@
 namespace Aw\DataPort\Writer\Adapter;
 
 use Aw\DataPort\WriterAdapter,
-    Aw\DataPort\Exception;
+    Aw\DataPort\Exception,
+    Aw\DataPort\Value\Ignorable as IgnorableValue;
 
 /**
  * Abstract Writer Adapter
@@ -27,6 +28,16 @@ abstract class AbstractWriterAdapter implements WriterAdapter
     
     public function writeRow(array $row)
     {
+        $tmpRow = $row;
+        $row = array();
+        foreach ($tmpRow as $key => $value)
+        {
+            if (!($value instanceof IgnorableValue))
+            {
+                $row[$key] = $value;
+            }
+        }
+        
         $success = $this->_writeRow($row);
         
         if ($success)

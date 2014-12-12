@@ -88,6 +88,15 @@ class DataPorter
         return $this;
     }
     
+    /**
+     * Force writer flush
+     */
+    public function flush()
+    {
+        $this->writer->flush();
+        return $this;
+    }
+    
     public function port()
     {
         $count = 0;
@@ -106,12 +115,12 @@ class DataPorter
             {
                 throw new Exception('The ReaderAdapter should return an Iterator');
             }
-
-            foreach ($rows as $sourceRow)
+			
+			foreach ($rows as $sourceRow)
             {
                 $mappedRow = $this->mapper ? $this->mapper->mapSourceToDestinationRow($sourceRow) : $sourceRow;
                 
-                if (!$this->acceptRowByFilters($mappedRow, $this->preProcessorFilters))
+                if (!$this->acceptRowByFilters($mappedRow, $sourceRow, $this->preProcessorFilters))
                 {
                     $filteredCount++;
                     continue;
@@ -122,7 +131,7 @@ class DataPorter
                 {
                     if ($processor instanceof Processor)
                     {
-                        $processedRow = $processor->process($processedRow, $sourceRow, $sourceColumns, $this->mapper);
+                        $processedRow = $processor->processRow($processedRow, $sourceRow, $sourceColumns, $this->mapper);
                     }
                     else
                     {
@@ -130,7 +139,7 @@ class DataPorter
                     }
                 }
                 
-                if (!$this->acceptRowByFilters($processedRow, $this->postProcessorFilters))
+                if (!$this->acceptRowByFilters($processedRow, $sourceRow, $this->postProcessorFilters))
                 {
                     $filteredCount++;
                     continue;
@@ -161,11 +170,11 @@ class DataPorter
      * Private/protected function
      */
     
-    protected function acceptRowByFilters($row, $filters)
+    protected function acceptRowByFilters($row, $sourceRow, $filters)
     {
         foreach ($filters as $filter)
         {
-            if (!$filter->accept($row))
+            if (!$filter->accept($filter->getFilterBySource() ? $sourceRow : $row))
             {
                 return false;
             }
