@@ -173,25 +173,25 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
         
         foreach ($row as $key => $value)
         {
-            [$key] = $this->quoteValue($value);
+            $row[$key] = $this->quoteValue($value);
         }
 
         if ($this->createdDateColumn)
         {
-            [$this->createdDateColumn] = 'NOW()';
+            $row[$this->createdDateColumn] = 'NOW()';
         }
 
         if ($this->changedDateColumn)
         {
-            [$this->changedDateColumn] = 'NOW()';
+            $row[$this->changedDateColumn] = 'NOW()';
         }
 
         if ($this->touchedDateColumn)
         {
-            [$this->touchedDateColumn] = 'NOW()';
+            $row[$this->touchedDateColumn] = 'NOW()';
         }
         
-        $this->sqlBuffer .= " (" . implode(", ", ) . "), ";
+        $this->sqlBuffer .= " (" . implode(", ", $row) . "), ";
 
         $this->queryBufferCounter++;
         
