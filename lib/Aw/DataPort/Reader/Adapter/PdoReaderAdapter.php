@@ -23,7 +23,7 @@ class PdoReaderAdapter implements ReaderAdapter
 	
 	protected $fetchMode;
 	
-	public function __construct(PDO $connection, $sqlQuery, array $params = null, $fetchMode = PDO::FETCH_ASSOC)
+	public function __construct($connection, $sqlQuery, array $params = null, $fetchMode = PDO::FETCH_ASSOC)
 	{
 		$this->connection = $connection;
 		$this->sqlQuery = $sqlQuery;
