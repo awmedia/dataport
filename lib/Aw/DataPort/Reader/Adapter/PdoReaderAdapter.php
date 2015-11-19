@@ -67,7 +67,7 @@ class PdoReaderAdapter implements ReaderAdapter
 	 * Private/protected methods
 	 */
 	
-	private function getStmt()
+	protected function getStmt()
 	{
 		if (!$this->stmt)
 		{
