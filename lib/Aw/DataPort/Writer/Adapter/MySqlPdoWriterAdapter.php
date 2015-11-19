@@ -171,7 +171,7 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
             $this->sqlBuffer .= " INTO " . ($this->getDatabase(true, '.')) . " " . $this->getTable(true) . " (`" . implode('`, `', $this->columns) . "`) VALUES ";
         }
         
-        foreach ( as $key => $value)
+        foreach ($row as $key => $value)
         {
             [$key] = $this->quoteValue($value);
         }
