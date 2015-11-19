@@ -77,7 +77,7 @@ class PdoReaderAdapter implements ReaderAdapter
 		return $this->stmt;
 	}
 	
-	private function getIterator()
+	protected function getIterator()
 	{
 		if (!$this->iterator)
 		{
