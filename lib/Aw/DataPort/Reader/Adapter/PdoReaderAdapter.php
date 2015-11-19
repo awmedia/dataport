@@ -49,7 +49,8 @@ class PdoReaderAdapter implements ReaderAdapter
 	{
 		if (!$this->columns)
 		{
-			$columnCount = $this->stmt->columnCount();
+			$stmt = $this->getStmt();
+			$columnCount = $stmt->columnCount();
 			$columns = array();
 			for ($i = 0; $i < $columnCount; $i++)
 			{
@@ -66,17 +67,27 @@ class PdoReaderAdapter implements ReaderAdapter
 	 * Private/protected methods
 	 */
 	
+	private function getStmt()
+	{
+		if (!$this->stmt)
+		{
+			$this->stmt = $this->connection->prepare($this->sqlQuery);
+		}
+		
+		return $this->stmt;
+	}
+	
 	private function getIterator()
 	{
 		if (!$this->iterator)
 		{
-			$this->stmt = $this->connection->prepare($this->sqlQuery);
+			$stmt = $this->getStmt();
 			foreach ($this->params as $key => $value)
 			{
-				$this->stmt->bindValue($key, $value);
+				$stmt->bindValue($key, $value);
 			}
-			$this->stmt->execute();
-			$this->iterator = new PdoStatementIterator($this->stmt, $this->fetchMode);
+			$stmt->execute();
+			$this->iterator = new PdoStatementIterator($stmt, $this->fetchMode);
 		}
 		
 		return $this->iterator;
