@@ -23,7 +23,9 @@ class Mapper
     }
     
     public function __construct(array $mapping)
-    {
+    { 
+        $this->mapping = [];
+        
         if ($mapping)
         {
             $this->setMapping($mapping);
