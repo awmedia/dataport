@@ -1,6 +1,6 @@
 <?php
 
-namespace Aw\DataPort;
+namespace Aw\DataPort\Writer\Adapter;
 
 /**
  * AbstractDatabaseWriterAdapter

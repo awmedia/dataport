@@ -68,7 +68,7 @@ class MySqlPdoWriterAdapter extends AbstractDatabaseWriterAdapter
                 AND    table_name = :tableName   
             ";
             
-            if ($databaseName = $this->getDatabaseName())
+            if ($databaseName = $this->getDatabase())
             {
               $sql .= "
                   AND table_schema = :databaseName
