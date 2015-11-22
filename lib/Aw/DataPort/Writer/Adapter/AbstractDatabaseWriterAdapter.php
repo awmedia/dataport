@@ -47,6 +47,12 @@ abstract class AbstractDatabaseWriterAdapter extends AbstractWriterAdapter
         return $this->lastItemId;
     }
     
+    public function getResult()
+    {
+        // not implemented by default to prevent memory issues...
+        return [];
+    }
+    
     /**
      * Private/protected methods
      */
