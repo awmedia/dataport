@@ -21,6 +21,8 @@ abstract class AbstractWriterAdapter implements WriterAdapter
     
     private $_writeCount = 0;
     
+    private $_totalWriteCount = 0;
+    
     public function setBufferSize($size)
     {
         $this->bufferSize = $size;
@@ -40,14 +42,21 @@ abstract class AbstractWriterAdapter implements WriterAdapter
         
         $success = $this->_writeRow($row);
         
+        if (!is_bool($success))
+        {
+            throw new Exception('Cannot determine if write is successful or not. ' . get_called_class() . '::_writeRow($row) should return a boolean value.');
+        }
+        
         if ($success)
         {
             $this->_writeCount++;
+            $this->_totalWriteCount++;
         }
         
         if ($this->_writeCount >= $this->bufferSize)
         {
             $this->flush();
+            $this->_writeCount = 0;
         }
     }
     
@@ -85,5 +94,10 @@ abstract class AbstractWriterAdapter implements WriterAdapter
      protected function getWriteCount()
      {
          return $this->_writeCount;
+     }
+     
+     protected function getTotalWriteCount()
+     {
+         return $this->_totalWriteCount;
      }
 }

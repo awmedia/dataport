@@ -9,7 +9,7 @@ use Aw\DataPort\Exception,
  * MySqlPdoWriterAdapter
  * @author Jerry Sietsma
  */
-class MySqlPdoWriterAdapter extends AbstractWriterAdapter
+class MySqlPdoWriterAdapter extends AbstractDatabaseWriterAdapter
 {
     const INSERT_MODE_INSERT = 'insert';
 
@@ -53,7 +53,6 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
         $this->connection = $connection;
         
         $this->sqlBuffer = null;
-        $this->queryBufferCounter = 0;
         $this->primaryKeyColumns = array();
         $this->insertMode = $insertMode;
         $this->onDuplicateKeyUpdateSqlSuffix = null;
@@ -193,12 +192,16 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
         
         $this->sqlBuffer .= " (" . implode(", ", $row) . "), ";
 
+        return true;
+        
+        /*
         $this->queryBufferCounter++;
         
         if ($this->queryBufferCounter >= $this->queryBufferRowsSize)
         {
             $this->flush();
         }
+        */
     }
     
     public function flush()
@@ -282,7 +285,7 @@ class MySqlPdoWriterAdapter extends AbstractWriterAdapter
             $this->executeQuery($this->sqlBuffer . ';');
             
             $this->sqlBuffer = null;
-            $this->queryBufferCounter = 0;
+            //$this->queryBufferCounter = 0;
         }
     }
 

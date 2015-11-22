@@ -12,7 +12,7 @@ use Aw\DataPort\Exception,
  * Write rows to MySql dump file
  * @author Jerry Sietsma
  */
-class MySqlQueryFileWriterAdapter extends AbstractWriterAdapter
+class MySqlQueryFileWriterAdapter extends MySqlPdoWriterAdapter
 {
     protected $filename;
     
@@ -27,8 +27,7 @@ class MySqlQueryFileWriterAdapter extends AbstractWriterAdapter
         
         parent::__construct($tableName, $connection, $insertMode, false);
         
-        //$this->filename = File::uniqueFilename($filename);
-        
+        // reset file contents
         file_put_contents($this->filename, '', LOCK_EX);
     }
 
@@ -38,7 +37,7 @@ class MySqlQueryFileWriterAdapter extends AbstractWriterAdapter
      
     public function getLastInsertId()
     {
-        throw new RapidException(get_called_class() . ' does not support getLastInsertId'); 
+        throw new Exception(get_called_class() . ' does not support getLastInsertId'); 
     }
 
     protected function executeQuery($query)
